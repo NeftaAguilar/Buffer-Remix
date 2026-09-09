@@ -54,7 +54,11 @@ function wrapForLinkedIn(text: string): string {
 }
 
 function puncturizeForStory(text: string): string {
-  const firstSentence = text.split(/[.!?]/, 1)[0]?.trim() ?? text;
+  const sentences = text
+    .split(/[.!?]+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+  const firstSentence = sentences[0] ?? text;
   const words = firstSentence.split(/\s+/).filter(Boolean).slice(0, STORY_WORD_LIMIT);
   return `✨ ${words.join(" ")} ✨`;
 }
