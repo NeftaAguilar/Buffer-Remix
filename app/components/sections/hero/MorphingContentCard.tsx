@@ -80,28 +80,29 @@ const LOOP_INTERVAL_MS = 3000;
  * "one idea, remixed per platform" without a hard cut.
  */
 export function MorphingContentCard() {
-  const shouldReduceMotion = useReducedMotion();
+  const reduceMotionUnconfirmed = useReducedMotion() !== false;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    if (reduceMotionUnconfirmed) return;
 
     const id = setInterval(() => {
       setIndex((previous) => (previous + 1) % SHAPES.length);
     }, LOOP_INTERVAL_MS);
 
     return () => clearInterval(id);
-  }, [shouldReduceMotion]);
+  }, [reduceMotionUnconfirmed]);
 
-  // Reduced motion: skip the loop entirely and land on the final shape, static.
-  const activeIndex = shouldReduceMotion ? SHAPES.length - 1 : index;
+  // Reduced motion (or not yet confirmed otherwise): skip the loop and land
+  // on the final shape, static.
+  const activeIndex = reduceMotionUnconfirmed ? SHAPES.length - 1 : index;
   const shape = SHAPES[activeIndex];
 
   return (
     <motion.div
-      layout={!shouldReduceMotion}
+      layout={!reduceMotionUnconfirmed}
       transition={
-        shouldReduceMotion
+        reduceMotionUnconfirmed
           ? { duration: 0 }
           : { type: "spring", stiffness: 140, damping: 18, mass: 1 }
       }
@@ -111,10 +112,10 @@ export function MorphingContentCard() {
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={shape.id}
-          layout={!shouldReduceMotion}
-          initial={shouldReduceMotion ? false : { opacity: 0 }}
+          layout={!reduceMotionUnconfirmed}
+          initial={reduceMotionUnconfirmed ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={shouldReduceMotion ? undefined : { opacity: 0 }}
+          exit={reduceMotionUnconfirmed ? undefined : { opacity: 0 }}
           transition={{ duration: 0.25 }}
           className="flex h-full w-full flex-col"
         >
