@@ -76,7 +76,11 @@ const ITEM_VARIANTS = {
  * platform icon fades/slides in one after another (staggered), once.
  */
 export function ProblemStrip() {
-  const shouldReduceMotion = useReducedMotion();
+  // `useReducedMotion` is `boolean | null` — `null` until the media query
+  // resolves (including SSR and the initial client render). Only animate
+  // once motion is explicitly confirmed allowed, so the section never
+  // renders hidden while the preference is unresolved.
+  const motionAllowed = useReducedMotion() === false;
 
   return (
     <section
@@ -84,24 +88,24 @@ export function ProblemStrip() {
       className="flex min-h-[40vh] flex-col items-center justify-center gap-8 px-6 py-20 text-center"
     >
       <motion.div
-        initial={shouldReduceMotion ? false : "hidden"}
-        whileInView={shouldReduceMotion ? undefined : "visible"}
+        initial={motionAllowed ? "hidden" : false}
+        whileInView={motionAllowed ? "visible" : undefined}
         viewport={{ once: true, amount: 0.6 }}
-        variants={shouldReduceMotion ? undefined : CONTAINER_VARIANTS}
+        variants={motionAllowed ? CONTAINER_VARIANTS : undefined}
         className="flex flex-col items-center gap-8"
       >
         <motion.p
-          variants={shouldReduceMotion ? undefined : ITEM_VARIANTS}
+          variants={motionAllowed ? ITEM_VARIANTS : undefined}
           className="max-w-2xl text-xl font-medium text-foreground sm:text-2xl"
         >
           Writing once, reformatting five times, is not a system.
         </motion.p>
 
-        <ul className="flex items-center gap-6 sm:gap-8">
+        <ul className="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
           {PLATFORM_ICONS.map((icon) => (
             <motion.li
               key={icon.id}
-              variants={shouldReduceMotion ? undefined : ITEM_VARIANTS}
+              variants={motionAllowed ? ITEM_VARIANTS : undefined}
             >
               <svg
                 viewBox="0 0 24 24"
