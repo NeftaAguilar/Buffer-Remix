@@ -17,21 +17,21 @@ const DRAFTS: readonly Draft[] = [
     platform: "@remixed · X / Twitter",
     body: "Ship fast, remix everywhere 🚀",
     meta: "♡ 128 · 🔁 42",
-    revealRange: [0.55, 0.68],
+    revealRange: [0.4, 0.5],
   },
   {
     id: "linkedin",
     platform: "Buffer Remix · LinkedIn",
     body: "One idea, rewritten for the way LinkedIn actually reads.",
     meta: "👏 342 · 💬 58",
-    revealRange: [0.63, 0.76],
+    revealRange: [0.46, 0.56],
   },
   {
     id: "instagram",
     platform: "Instagram · Story",
     body: "NEW: Remix ✨",
     meta: "❤️ 980",
-    revealRange: [0.71, 0.85],
+    revealRange: [0.52, 0.62],
   },
 ];
 
