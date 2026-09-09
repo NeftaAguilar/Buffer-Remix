@@ -22,9 +22,13 @@ import { DraftsStep } from "./how-it-works/DraftsStep";
 export function HowItWorks() {
   const motionAllowed = useReducedMotion() === false;
   const sectionRef = useRef<HTMLDivElement>(null);
+  // "start start" matches where the Hero CTA's `scrollIntoView()` lands
+  // (section top at viewport top) — progress starts at 0 right as the user
+  // arrives, instead of already partway through from the section's earlier
+  // entry from below the fold, which skipped steps 1-2 on arrival.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end start"],
   });
 
   return (
@@ -49,7 +53,7 @@ export function HowItWorks() {
           description="Drop in a rough thought — no need to polish it first."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0, 0.15]}
+          revealRange={[0, 0.12]}
         >
           <PasteIdeaStep
             scrollYProgress={scrollYProgress}
@@ -63,7 +67,7 @@ export function HowItWorks() {
           description="Choose where it's going — Remix handles the formatting."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.25, 0.4]}
+          revealRange={[0.18, 0.3]}
         >
           <PickPlatformsStep
             scrollYProgress={scrollYProgress}
@@ -77,7 +81,7 @@ export function HowItWorks() {
           description="Tone, length, and format — tailored per network."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.5, 0.65]}
+          revealRange={[0.36, 0.48]}
         >
           <DraftsStep
             scrollYProgress={scrollYProgress}
