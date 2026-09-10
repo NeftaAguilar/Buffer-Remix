@@ -53,7 +53,7 @@ export function HowItWorks() {
           description="Drop in a rough thought — no need to polish it first."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0, 0.12]}
+          revealRange={[0, 0.05]}
         >
           <PasteIdeaStep
             scrollYProgress={scrollYProgress}
@@ -67,7 +67,7 @@ export function HowItWorks() {
           description="Choose where it's going — Remix handles the formatting."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.12, 0.19]}
+          revealRange={[0.04, 0.09]}
         >
           <PickPlatformsStep
             scrollYProgress={scrollYProgress}
@@ -81,7 +81,7 @@ export function HowItWorks() {
           description="Tone, length, and format — tailored per network."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.22, 0.28]}
+          revealRange={[0.08, 0.13]}
         >
           <DraftsStep
             scrollYProgress={scrollYProgress}
