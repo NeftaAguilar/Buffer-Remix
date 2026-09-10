@@ -17,7 +17,7 @@ sección = 1 branch = 1 PR (draft) = 1 `[ ]` de este plan.
       "Remix" real (mock rules) + result cards con `layout` morph
 - [ ] BeforeAfter — toggle antes/después (post genérico vs adaptado por
       plataforma), morph de cards vía `layout` + `AnimatePresence`
-      *(en progreso — branch `feature/before-after-section`)*
+      *(implementado — PR #7 abierto, pendiente de merge)*
 - [ ] PlatformGrid — grid animado de logos de plataforma con micro-interacciones
       hover
 - [ ] FinalCTA — botón magnético, sin testimonios inventados

@@ -5,9 +5,13 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Switch } from "@heroui/react";
 import { PLATFORMS, remixForPlatform, type PlatformId } from "./interactive-demo/remix-rules";
 
-/** One fixed idea this section demonstrates with — not user-editable. */
+/**
+ * One fixed idea this section demonstrates with — not user-editable.
+ * Deliberately longer than X's 180-char limit so toggling "After" visibly
+ * truncates the X card instead of leaving it identical to "Before".
+ */
 const SOURCE_IDEA =
-  "We just crossed 10,000 customers. Thank you to everyone who's been with us since day one.";
+  "We just crossed 10,000 customers, a milestone we've been chasing since the very first sale, and it wouldn't have happened without the incredible team and customers who believed in us from day one. Thank you, truly.";
 
 /** Per-platform card chrome — mirrors interactive-demo/RemixResults.tsx so the two sections read as one system. */
 const CARD_CLASSNAME: Record<PlatformId, string> = {

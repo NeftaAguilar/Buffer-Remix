@@ -67,7 +67,7 @@ export function HowItWorks() {
           description="Choose where it's going — Remix handles the formatting."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.18, 0.3]}
+          revealRange={[0.12, 0.19]}
         >
           <PickPlatformsStep
             scrollYProgress={scrollYProgress}
@@ -81,7 +81,7 @@ export function HowItWorks() {
           description="Tone, length, and format — tailored per network."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.36, 0.48]}
+          revealRange={[0.22, 0.28]}
         >
           <DraftsStep
             scrollYProgress={scrollYProgress}
