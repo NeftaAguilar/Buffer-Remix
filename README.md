@@ -29,7 +29,20 @@ npm run start   # serve the production build
 npm run lint    # eslint
 ```
 
-There are no environment variables to configure — this is a static frontend project with no external services or secrets.
+### Environment variables
+
+The InteractiveDemo section's "Remix" action calls a real model through
+[OpenRouter](https://openrouter.ai) via the Vercel AI SDK. Copy `.env.example`
+to `.env.local` and fill in:
+
+```
+OPENROUTER_API_KEY=   # from https://openrouter.ai/keys
+OPENROUTER_MODEL=     # optional, e.g. openai/gpt-4.1-mini — defaults to a small model if unset
+```
+
+Without a key configured, `/api/remix` degrades in place to the mock rules
+in `interactive-demo/remix-rules.ts`, with a "demo mode" note in the UI — the
+rest of the app works fine without any environment variables set.
 
 ### Pre-PR verification
 
@@ -46,6 +59,8 @@ app/
   layout.tsx                     # root layout, Geist fonts
   page.tsx                       # composes all sections in order
   globals.css
+  api/
+    remix/route.ts               # AI Remix endpoint (AI SDK + OpenRouter)
   components/
     sections/                    # one file per top-level landing page section
       Hero.tsx
@@ -61,7 +76,8 @@ app/
       interactive-demo/
         PlatformPicker.tsx
         RemixResults.tsx
-        remix-rules.ts          # mock "remix" transformation rules
+        remix-rules.ts          # mock "remix" transformation rules (fallback)
+        use-remix.ts            # calls /api/remix, falls back to remix-rules.ts
       BeforeAfter.tsx
       PlatformGrid.tsx
       FinalCTA.tsx

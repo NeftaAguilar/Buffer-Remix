@@ -17,9 +17,29 @@ sección = 1 branch = 1 PR (draft) = 1 `[ ]` de este plan.
       "Remix" real (mock rules) + result cards con `layout` morph
 - [x] BeforeAfter — toggle antes/después (post genérico vs adaptado por
       plataforma), morph de cards vía `layout` + `AnimatePresence`
-- [ ] PlatformGrid — grid animado de logos de plataforma con micro-interacciones
+- [x] PlatformGrid — grid animado de logos de plataforma con micro-interacciones
       hover
-- [ ] FinalCTA — botón magnético, sin testimonios inventados
+- [x] FinalCTA — botón magnético, sin testimonios inventados
+
+## AI Remix (real) — Vercel AI SDK + OpenRouter
+
+Reemplaza las reglas mock de `interactive-demo/remix-rules.ts` por una
+generación real vía IA, manteniendo la UX/animaciones existentes intactas.
+Diseño completo (contrato de API, prompt, manejo de errores/fallback) en el
+historial de conversación del 2026-09-10. Fallback: si `OPENROUTER_API_KEY`
+falta o la llamada falla, se degrada en silencio a `remix-rules.ts` con una
+nota "demo mode". Idioma: se preserva el del input del usuario.
+
+- [x] Fase 1+2+3 — endpoint `app/api/remix/route.ts` (AI SDK + OpenRouter,
+      caps de input/output, same-origin check, `.env.example`) + conectar
+      `InteractiveDemo`/`RemixResults` al endpoint real (loading/error state,
+      fallback a mock) + streaming en cascada. Nota: se usó `streamText` con
+      un protocolo de delimitadores (`<<<PLATFORM:id>>>...<<<END>>>`) en vez
+      de `streamObject`, por decisión explícita del usuario — loading por
+      card individual en vez de global, spinner en el botón Remix.
+- [ ] Fase 4 — rate limiting por IP + manejo de 429 en la UI
+- [ ] Fase 5 (opcional) — copy-to-clipboard, regenerar por card, caption
+      "generated live by <model>"
 
 ## Convenciones (no negociables)
 
