@@ -1,7 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { PLATFORMS, remixForPlatform, type PlatformId } from "./remix-rules";
+import { PlatformIcon } from "./platform-icons";
+import { PLATFORMS, type PlatformId } from "./remix-rules";
+import type { RemixMode, RemixStatus, RemixVariants } from "./use-remix";
 
 /** Per-platform card chrome — mirrors the shapes in hero/MorphingContentCard.tsx. */
 const CARD_CLASSNAME: Record<PlatformId, string> = {
@@ -23,6 +25,15 @@ interface RemixResultsProps {
   /** True once the live text/platform selection has diverged from `remixed`. */
   isOutdated: boolean;
   motionAllowed: boolean;
+  /** Status of the in-flight/most recent real remix request from useRemix. */
+  remixStatus: RemixStatus;
+  /**
+   * Per-platform text from useRemix, populated incrementally as the model's
+   * response streams in — a platform absent here is still generating.
+   */
+  variants: RemixVariants;
+  /** Whether `variants` came from the real model or the mock fallback rules. */
+  mode: RemixMode;
 }
 
 /**
@@ -31,7 +42,14 @@ interface RemixResultsProps {
  * mechanism as hero/MorphingContentCard.tsx — so adding/removing a
  * platform after a remix morphs the grid instead of jump-cutting it.
  */
-export function RemixResults({ remixed, isOutdated, motionAllowed }: RemixResultsProps) {
+export function RemixResults({
+  remixed,
+  isOutdated,
+  motionAllowed,
+  remixStatus,
+  variants,
+  mode,
+}: RemixResultsProps) {
   if (!remixed) {
     return (
       <p className="text-sm text-foreground/50">
@@ -43,12 +61,18 @@ export function RemixResults({ remixed, isOutdated, motionAllowed }: RemixResult
   const orderedPlatforms = PLATFORMS.filter((platform) =>
     remixed.platforms.includes(platform.id),
   );
+  const isStreaming = remixStatus === "loading";
 
   return (
     <div className="flex flex-col gap-3">
       {isOutdated && (
         <p className="text-xs font-medium text-foreground/50" role="status">
           Text or platforms changed since this remix — hit Remix again to update.
+        </p>
+      )}
+      {!isStreaming && !isOutdated && mode === "fallback" && (
+        <p className="text-xs font-medium text-foreground/50" role="status">
+          Demo mode — showing sample output.
         </p>
       )}
       <motion.div
@@ -58,7 +82,11 @@ export function RemixResults({ remixed, isOutdated, motionAllowed }: RemixResult
         }`}
       >
         <AnimatePresence mode="popLayout" initial={false}>
-          {orderedPlatforms.map((platform) => (
+          {orderedPlatforms.map((platform) => {
+            const platformText = variants[platform.id];
+            const isCardLoading = isStreaming && platformText === undefined;
+
+            return (
             <motion.div
               key={platform.id}
               layout={motionAllowed}
@@ -73,23 +101,46 @@ export function RemixResults({ remixed, isOutdated, motionAllowed }: RemixResult
               className={CARD_CLASSNAME[platform.id]}
             >
               <p
-                className={`text-xs font-medium ${
+                className={`flex items-center gap-1.5 text-xs font-medium ${
                   platform.id === "instagram" ? "text-white/80" : "text-foreground/50"
                 }`}
               >
+                <PlatformIcon id={platform.id} className="h-3.5 w-3.5 shrink-0" />
                 {PLATFORM_META[platform.id].handle}
               </p>
-              <p
-                className={`whitespace-pre-line text-sm leading-relaxed ${
-                  platform.id === "instagram"
-                    ? "text-lg font-bold text-white"
-                    : "text-foreground"
-                }`}
-              >
-                {remixForPlatform(platform.id, remixed.text)}
-              </p>
+              {isCardLoading ? (
+                <div
+                  className={`flex flex-col gap-2 ${
+                    platform.id === "instagram" ? "items-center" : ""
+                  }`}
+                  role="status"
+                  aria-label={`Remixing for ${platform.label}…`}
+                >
+                  <div
+                    className={`h-3 w-full animate-pulse rounded-full ${
+                      platform.id === "instagram" ? "bg-white/30" : "bg-foreground/10"
+                    }`}
+                  />
+                  <div
+                    className={`h-3 w-2/3 animate-pulse rounded-full ${
+                      platform.id === "instagram" ? "bg-white/30" : "bg-foreground/10"
+                    }`}
+                  />
+                </div>
+              ) : (
+                <p
+                  className={`whitespace-pre-line text-sm leading-relaxed ${
+                    platform.id === "instagram"
+                      ? "text-lg font-bold text-white"
+                      : "text-foreground"
+                  }`}
+                >
+                  {platformText}
+                </p>
+              )}
             </motion.div>
-          ))}
+            );
+          })}
         </AnimatePresence>
       </motion.div>
     </div>
