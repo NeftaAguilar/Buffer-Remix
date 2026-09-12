@@ -81,7 +81,7 @@ export function HowItWorks() {
           description="Tone, length, and format — tailored per network."
           scrollYProgress={scrollYProgress}
           motionAllowed={motionAllowed}
-          revealRange={[0.08, 0.13]}
+          revealRange={[0.04, 0.09]}
         >
           <DraftsStep
             scrollYProgress={scrollYProgress}
